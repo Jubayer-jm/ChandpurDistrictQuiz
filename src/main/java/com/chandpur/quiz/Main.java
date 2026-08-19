@@ -17,18 +17,132 @@ public class Main {
             System.out.println("================================");
 
             System.out.println("1. Start Quiz");
-            System.out.println("2. Exit");
+            System.out.println("2. Quiz History");
+            System.out.println("3. Leaderboard");
+            System.out.println("4. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
+            // ==============================
+            // QUIZ HISTORY
+            // ==============================
             if (choice == 2) {
-                System.out.println("Thank you for playing!");
+
+                System.out.println("\n================================");
+                System.out.println("          QUIZ HISTORY");
+                System.out.println("================================");
+
+                List<Result> results = ResultDAO.getAllResults();
+
+                if (results.isEmpty()) {
+
+                    System.out.println("No quiz history found.");
+
+                } else {
+
+                    int count = 1;
+
+                    for (Result result : results) {
+
+                        System.out.println("\nAttempt " + count);
+                        System.out.println("----------------------------");
+
+                        System.out.println(
+                                "Player: " + result.getPlayerName()
+                        );
+
+                        System.out.println(
+                                "Score: "
+                                        + result.getScore()
+                                        + "/"
+                                        + result.getTotalQuestions()
+                        );
+
+                        System.out.printf(
+                                "Percentage: %.2f%%\n",
+                                result.getPercentage()
+                        );
+
+                        System.out.println(
+                                "Grade: " + result.getGrade()
+                        );
+
+                        count++;
+                    }
+                }
+
+                System.out.println("\n================================");
+                continue;
+            }
+
+            // ==============================
+            // LEADERBOARD
+            // ==============================
+            if (choice == 3) {
+
+                System.out.println("\n================================");
+                System.out.println("          LEADERBOARD");
+                System.out.println("================================");
+
+                List<Result> leaderboard =
+                        ResultDAO.getLeaderboard();
+
+                if (leaderboard.isEmpty()) {
+
+                    System.out.println("No quiz results found.");
+
+                } else {
+
+                    System.out.println(
+                            "Rank   Player              Score"
+                    );
+
+                    System.out.println(
+                            "----------------------------------------"
+                    );
+
+                    int rank = 1;
+
+                    for (Result result : leaderboard) {
+
+                        System.out.printf(
+                                "%-6d %-19s %d/%d%n",
+                                rank,
+                                result.getPlayerName(),
+                                result.getScore(),
+                                result.getTotalQuestions()
+                        );
+
+                        rank++;
+                    }
+                }
+
+                System.out.println(
+                        "================================"
+                );
+
+                continue;
+            }
+
+            // ==============================
+            // EXIT
+            // ==============================
+            if (choice == 4) {
+
+                System.out.println(
+                        "Thank you for playing!"
+                );
+
                 break;
             }
 
+            // ==============================
+            // START QUIZ
+            // ==============================
             if (choice != 1) {
+
                 System.out.println("Invalid choice!");
                 continue;
             }
@@ -68,123 +182,221 @@ public class Main {
 
             questions.add(new Question(
                     "What is Chandpur popularly known as?",
-                    new String[]{"City of Rivers", "City of Hilsa", "City of Lakes", "City of Hills"},
+                    new String[]{
+                            "City of Rivers",
+                            "City of Hilsa",
+                            "City of Lakes",
+                            "City of Hills"
+                    },
                     2
             ));
 
             questions.add(new Question(
                     "Which upazila is known for Matlab?",
-                    new String[]{"Matlab North", "Haimchar", "Kachua", "Faridganj"},
+                    new String[]{
+                            "Matlab North",
+                            "Haimchar",
+                            "Kachua",
+                            "Faridganj"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which river is very important to Chandpur?",
-                    new String[]{"Meghna", "Teesta", "Surma", "Karnaphuli"},
+                    new String[]{
+                            "Meghna",
+                            "Teesta",
+                            "Surma",
+                            "Karnaphuli"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Chandpur district is famous for which market?",
-                    new String[]{"Hajiganj Bazar", "Boro Station Fish Ghat", "New Market", "Karwan Bazar"},
+                    new String[]{
+                            "Hajiganj Bazar",
+                            "Boro Station Fish Ghat",
+                            "New Market",
+                            "Karwan Bazar"
+                    },
                     2
             ));
 
             questions.add(new Question(
                     "Which district is near Chandpur?",
-                    new String[]{"Rangpur", "Lakshmipur", "Panchagarh", "Thakurgaon"},
+                    new String[]{
+                            "Rangpur",
+                            "Lakshmipur",
+                            "Panchagarh",
+                            "Thakurgaon"
+                    },
                     2
             ));
 
             questions.add(new Question(
                     "Chandpur is located in which part of Bangladesh?",
-                    new String[]{"North-west", "South-east", "North-east", "South-west"},
+                    new String[]{
+                            "North-west",
+                            "South-east",
+                            "North-east",
+                            "South-west"
+                    },
                     2
             ));
 
             questions.add(new Question(
                     "Which upazila is part of Chandpur district?",
-                    new String[]{"Hajiganj", "Savar", "Dohar", "Keraniganj"},
+                    new String[]{
+                            "Hajiganj",
+                            "Savar",
+                            "Dohar",
+                            "Keraniganj"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which upazila is part of Chandpur district?",
-                    new String[]{"Shahrasti", "Tongi", "Kapasia", "Sakhipur"},
+                    new String[]{
+                            "Shahrasti",
+                            "Tongi",
+                            "Kapasia",
+                            "Sakhipur"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which upazila is part of Chandpur district?",
-                    new String[]{"Haimchar", "Dhamrai", "Saturia", "Manikganj"},
+                    new String[]{
+                            "Haimchar",
+                            "Dhamrai",
+                            "Saturia",
+                            "Manikganj"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which upazila is part of Chandpur district?",
-                    new String[]{"Kachua", "Rupganj", "Araihazar", "Sonargaon"},
+                    new String[]{
+                            "Kachua",
+                            "Rupganj",
+                            "Araihazar",
+                            "Sonargaon"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which district is adjacent to Chandpur?",
-                    new String[]{"Lakshmipur", "Panchagarh", "Thakurgaon", "Kurigram"},
+                    new String[]{
+                            "Lakshmipur",
+                            "Panchagarh",
+                            "Thakurgaon",
+                            "Kurigram"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which river is very important to Chandpur?",
-                    new String[]{"Meghna", "Teesta", "Dharla", "Karatoya"},
+                    new String[]{
+                            "Meghna",
+                            "Teesta",
+                            "Dharla",
+                            "Karatoya"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Chandpur is situated in which country?",
-                    new String[]{"India", "Bangladesh", "Nepal", "Bhutan"},
+                    new String[]{
+                            "India",
+                            "Bangladesh",
+                            "Nepal",
+                            "Bhutan"
+                    },
                     2
             ));
 
             questions.add(new Question(
                     "Which activity is important in Chandpur?",
-                    new String[]{"Fishing", "Tea cultivation", "Coal mining", "Jute mining"},
+                    new String[]{
+                            "Fishing",
+                            "Tea cultivation",
+                            "Coal mining",
+                            "Jute mining"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which fish is strongly associated with Chandpur?",
-                    new String[]{"Hilsa", "Rui", "Katla", "Pangash"},
+                    new String[]{
+                            "Hilsa",
+                            "Rui",
+                            "Katla",
+                            "Pangash"
+                    },
                     1
             ));
 
             questions.add(new Question(
                     "Which place in Chandpur is famous for Hilsa fish?",
-                    new String[]{"Boro Station", "Kamalapur", "Gabtoli", "Sadarghat"},
+                    new String[]{
+                            "Boro Station",
+                            "Kamalapur",
+                            "Gabtoli",
+                            "Sadarghat"
+                    },
                     1
             ));
+
+            // ==============================
+            // CREATE QUIZ
+            // ==============================
 
             Quiz quiz = new Quiz(questions);
             Player player = new Player(name);
 
             System.out.println("\nStarting Quiz...\n");
 
+            // ==============================
+            // QUIZ QUESTIONS
+            // ==============================
+
             for (int i = 0; i < quiz.getTotalQuestions(); i++) {
 
-                Question question = quiz.getQuestions().get(i);
+                Question question =
+                        quiz.getQuestions().get(i);
 
                 System.out.println("Q" + (i + 1) + ":");
-                System.out.println(question.getQuestionText());
+                System.out.println(
+                        question.getQuestionText()
+                );
 
-                String[] options = question.getOptions();
+                String[] options =
+                        question.getOptions();
 
                 for (int j = 0; j < options.length; j++) {
-                    System.out.println((j + 1) + ". " + options[j]);
+
+                    System.out.println(
+                            (j + 1) + ". " + options[j]
+                    );
                 }
 
                 int answer;
 
                 while (true) {
 
-                    System.out.print("Your answer (1-4): ");
+                    System.out.print(
+                            "Your answer (1-4): "
+                    );
+
                     answer = scanner.nextInt();
 
                     if (answer >= 1 && answer <= 4) {
@@ -196,13 +408,26 @@ public class Main {
                     );
                 }
 
-                if (answer == question.getCorrectAnswer()) {
-                    System.out.println("Correct!\n");
+                if (answer ==
+                        question.getCorrectAnswer()) {
+
+                    System.out.println(
+                            "Correct!\n"
+                    );
+
                     player.addScore();
+
                 } else {
-                    System.out.println("Wrong!\n");
+
+                    System.out.println(
+                            "Wrong!\n"
+                    );
                 }
             }
+
+            // ==============================
+            // CREATE RESULT
+            // ==============================
 
             Result result = new Result(
                     player.getName(),
@@ -210,56 +435,108 @@ public class Main {
                     quiz.getTotalQuestions()
             );
 
-            System.out.println("================================");
-            System.out.println("           RESULT");
-            System.out.println("================================");
+            // ==============================
+            // SAVE RESULT
+            // ==============================
 
-            System.out.println("Player: " + result.getPlayerName());
+            ResultDAO.saveResult(result);
 
-            System.out.println("Score: " + result.getScore()
-                    + "/" + result.getTotalQuestions());
+            // ==============================
+            // SHOW RESULT
+            // ==============================
+
+            System.out.println(
+                    "================================"
+            );
+
+            System.out.println(
+                    "           RESULT"
+            );
+
+            System.out.println(
+                    "================================"
+            );
+
+            System.out.println(
+                    "Player: "
+                            + result.getPlayerName()
+            );
+
+            System.out.println(
+                    "Score: "
+                            + result.getScore()
+                            + "/"
+                            + result.getTotalQuestions()
+            );
 
             System.out.printf(
                     "Percentage: %.2f%%\n",
                     result.getPercentage()
             );
 
-            System.out.println("Grade: " + result.getGrade());
+            System.out.println(
+                    "Grade: "
+                            + result.getGrade()
+            );
 
             if (result.getPercentage() >= 80) {
+
                 System.out.println(
                         "Excellent! You are very knowledgeable about Chandpur."
                 );
+
             } else if (result.getPercentage() >= 60) {
+
                 System.out.println(
                         "Very Good! You have good knowledge about Chandpur."
                 );
+
             } else if (result.getPercentage() >= 40) {
+
                 System.out.println(
                         "Good effort! Keep learning about Chandpur."
                 );
+
             } else {
+
                 System.out.println(
                         "Keep practicing and learn more about Chandpur."
                 );
             }
 
-            System.out.println("================================");
+            System.out.println(
+                    "================================"
+            );
+
+            // ==============================
+            // PLAY AGAIN
+            // ==============================
 
             System.out.println("\n1. Play Again");
             System.out.println("2. Exit");
 
-            System.out.print("Enter your choice: ");
+            System.out.print(
+                    "Enter your choice: "
+            );
+
             int again = scanner.nextInt();
             scanner.nextLine();
 
             if (again == 2) {
-                System.out.println("\nThank you for playing!");
+
+                System.out.println(
+                        "\nThank you for playing!"
+                );
+
                 break;
             }
 
             if (again != 1) {
-                System.out.println("\nInvalid choice. Exiting...");
+
+                System.out.println(
+                        "\nInvalid choice. Exiting..."
+                );
+
                 break;
             }
 

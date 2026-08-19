@@ -12,6 +12,7 @@ import java.io.IOException;
 @WebServlet("/result")
 public class ResultServlet extends HttpServlet {
 
+    @Override
     protected void doPost(
             HttpServletRequest request,
             HttpServletResponse response)
@@ -27,6 +28,9 @@ public class ResultServlet extends HttpServlet {
         Integer score =
                 (Integer) session.getAttribute("score");
 
+        String username =
+                (String) session.getAttribute("username");
+
         if (questionNumber == null) {
             questionNumber = 1;
         }
@@ -34,6 +38,14 @@ public class ResultServlet extends HttpServlet {
         if (score == null) {
             score = 0;
         }
+
+        if (username == null || username.trim().isEmpty()) {
+            username = "Guest";
+        }
+
+        // =====================================
+        // CORRECT ANSWERS
+        // =====================================
 
         String[] correctAnswers = {
                 "Hilsa",
@@ -58,49 +70,60 @@ public class ResultServlet extends HttpServlet {
                 "Hilsa"
         };
 
-        if (questionNumber >= 1 &&
-                questionNumber <= 20 &&
-                correctAnswers[questionNumber - 1].equals(answer)) {
+        // =====================================
+        // CHECK ANSWER
+        // =====================================
+
+        if (questionNumber >= 1
+                && questionNumber <= 20
+                && answer != null
+                && correctAnswers[questionNumber - 1]
+                .equals(answer)) {
 
             score++;
         }
+
+        // =====================================
+        // QUIZ COMPLETED
+        // =====================================
 
         if (questionNumber == 20) {
 
             session.setAttribute("score", score);
 
-            response.setContentType("text/html;charset=UTF-8");
-
-            response.getWriter().println(
-                    "<html>" +
-                            "<head><title>Quiz Result</title></head>" +
-                            "<body style='font-family:Arial;text-align:center;margin-top:80px;'>" +
-
-                            "<h1 style='color:green;'>Quiz Completed!</h1>" +
-
-                            "<h2>Congratulations, " +
-                            session.getAttribute("username") +
-                            "!</h2>" +
-
-                            "<h3>Your Final Score</h3>" +
-
-                            "<h1>" + score + " / 20</h1>" +
-
-                            "<br>" +
-
-                            "<a href='restartQuiz'>Play Again</a>" +
-
-                            "</body>" +
-                            "</html>"
+            // Create Result object
+            Result result = new Result(
+                    username,
+                    score,
+                    20
             );
+
+            // Save result to MySQL
+            ResultDAO.saveResult(result);
+
+            // Save result in session
+            session.setAttribute("finalResult", result);
+
+            response.sendRedirect("result.jsp");
 
             return;
         }
 
+        // =====================================
+        // NEXT QUESTION
+        // =====================================
+
         questionNumber++;
 
-        session.setAttribute("questionNumber", questionNumber);
-        session.setAttribute("score", score);
+        session.setAttribute(
+                "questionNumber",
+                questionNumber
+        );
+
+        session.setAttribute(
+                "score",
+                score
+        );
 
         response.sendRedirect("question.jsp");
     }
